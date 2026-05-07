@@ -1,0 +1,463 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: HUCE Autos API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: cars
+    description: Car inventory operations
+  - name: sellers
+    description: Seller operations
+  - name: stats
+    description: Statistics and analytics
+  - name: news
+    description: News and articles
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /cars:
+    get:
+      operationId: listCars
+      tags: [cars]
+      summary: List cars
+      description: Returns a paginated list of cars with optional filters
+      parameters:
+        - name: make
+          in: query
+          schema:
+            type: string
+        - name: model
+          in: query
+          schema:
+            type: string
+        - name: year
+          in: query
+          schema:
+            type: integer
+        - name: condition
+          in: query
+          schema:
+            type: string
+            enum: [new, used, certified_pre_owned]
+        - name: minPrice
+          in: query
+          schema:
+            type: number
+        - name: maxPrice
+          in: query
+          schema:
+            type: number
+        - name: location
+          in: query
+          schema:
+            type: string
+        - name: sellerId
+          in: query
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 12
+      responses:
+        "200":
+          description: List of cars
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CarListResponse"
+
+  /cars/featured:
+    get:
+      operationId: getFeaturedCars
+      tags: [cars]
+      summary: Get featured cars
+      description: Returns featured/highlighted cars
+      responses:
+        "200":
+          description: Featured cars
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Car"
+
+  /cars/recent:
+    get:
+      operationId: getRecentCars
+      tags: [cars]
+      summary: Get recently listed cars
+      description: Returns recently added cars
+      responses:
+        "200":
+          description: Recent cars
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Car"
+
+  /cars/{id}:
+    get:
+      operationId: getCar
+      tags: [cars]
+      summary: Get car details
+      description: Returns detailed info about a specific car
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Car details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Car"
+        "404":
+          description: Car not found
+
+  /sellers:
+    get:
+      operationId: listSellers
+      tags: [sellers]
+      summary: List sellers
+      description: Returns all verified sellers
+      responses:
+        "200":
+          description: List of sellers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Seller"
+
+  /sellers/{id}:
+    get:
+      operationId: getSeller
+      tags: [sellers]
+      summary: Get seller details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Seller details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Seller"
+        "404":
+          description: Seller not found
+
+  /stats/overview:
+    get:
+      operationId: getStatsOverview
+      tags: [stats]
+      summary: Get overview statistics
+      description: Returns counts and summary statistics for the platform
+      responses:
+        "200":
+          description: Overview stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatsOverview"
+
+  /news:
+    get:
+      operationId: getNewsList
+      tags: [news]
+      summary: List published news articles
+      description: Returns a list of published news articles
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of news articles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NewsArticle"
+
+  /news/{slug}:
+    get:
+      operationId: getNewsArticle
+      tags: [news]
+      summary: Get a news article by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: News article
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsArticle"
+        "404":
+          description: Article not found
+
+  /stats/makes:
+    get:
+      operationId: getStatsByMake
+      tags: [stats]
+      summary: Get stats grouped by car make
+      description: Returns the number of listings per car make
+      responses:
+        "200":
+          description: Stats by make
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MakeStat"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    Car:
+      type: object
+      properties:
+        id:
+          type: integer
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: integer
+        price:
+          type: number
+        condition:
+          type: string
+          enum: [new, used, certified_pre_owned]
+        location:
+          type: string
+        mileage:
+          type: integer
+        color:
+          type: string
+        carType:
+          type: string
+        transmission:
+          type: string
+        fuelType:
+          type: string
+        driveType:
+          type: string
+        doors:
+          type: integer
+        vin:
+          type: string
+        description:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+        sellerId:
+          type: integer
+        sellerName:
+          type: string
+        featured:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        features:
+          type: object
+          description: Grouped features (only populated by the detail endpoint)
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+              required:
+                - id
+                - name
+      required:
+        - id
+        - make
+        - model
+        - year
+        - price
+        - condition
+        - location
+        - images
+        - sellerId
+        - sellerName
+        - featured
+        - createdAt
+
+    CarListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Car"
+        total:
+          type: integer
+        page:
+          type: integer
+        totalPages:
+          type: integer
+      required:
+        - data
+        - total
+        - page
+        - totalPages
+
+    Seller:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        lotName:
+          type: string
+        location:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        verified:
+          type: boolean
+        rating:
+          type: number
+        totalListings:
+          type: integer
+        joinedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - location
+        - verified
+        - rating
+        - totalListings
+        - joinedAt
+
+    StatsOverview:
+      type: object
+      properties:
+        totalCars:
+          type: integer
+        totalSellers:
+          type: integer
+        totalNewCars:
+          type: integer
+        totalUsedCars:
+          type: integer
+        avgPrice:
+          type: number
+        topLocation:
+          type: string
+      required:
+        - totalCars
+        - totalSellers
+        - totalNewCars
+        - totalUsedCars
+        - avgPrice
+        - topLocation
+
+    MakeStat:
+      type: object
+      properties:
+        make:
+          type: string
+        count:
+          type: integer
+      required:
+        - make
+        - count
+
+    NewsArticle:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        excerpt:
+          type: string
+          nullable: true
+        content:
+          type: string
+          nullable: true
+        imageUrl:
+          type: string
+          nullable: true
+        slug:
+          type: string
+        authorName:
+          type: string
+          nullable: true
+        publishedAt:
+          type: string
+          format: date-time
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - slug
+        - createdAt

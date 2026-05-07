@@ -1,0 +1,19 @@
+uploads = []
+
+[[generated]]
+id = "z8PcIUPg1KdPYHJ8jdp1D"
+uri = "file://artifacts/huce-autos/public/hero-bg.png"
+type = "image"
+title = "Premium car showroom hero background"
+
+[[generated]]
+id = "rCz7pWSMqT3ZQyPQVpOAX"
+uri = "file://artifacts/huce-autos/public/premium-abstract.png"
+type = "image"
+title = "Abstract premium car lines"
+
+[[outputs]]
+id = "qhrgmycnClzJZKWPzkNWJ"
+uri = "file://deployment.md"
+type = "text"
+title = "HUCE Autos — Deployment Guide"

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /seller/
+Disallow: /inspector/
+
+Sitemap: https://huce-automart.onrender.com/api/sitemap.xml
