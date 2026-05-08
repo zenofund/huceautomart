@@ -308,9 +308,9 @@ export default function SellPage() {
         </div>
 
         {plansLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="flex overflow-x-auto pt-6 pb-8 -mx-4 px-4 snap-x snap-mandatory gap-4 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0 md:pt-0 md:mx-auto md:px-0 md:snap-none max-w-4xl no-scrollbar">
             {[0, 1, 2].map((i) => (
-              <div key={i} className="rounded-2xl border border-border bg-card p-6 space-y-4 animate-pulse">
+              <div key={i} className="shrink-0 w-[85vw] sm:w-[320px] md:w-auto snap-center rounded-2xl border border-border bg-card p-6 space-y-4 animate-pulse mt-4 md:mt-0">
                 <div className="h-5 bg-gray-200 rounded w-1/2" />
                 <div className="h-4 bg-gray-100 rounded w-3/4" />
                 <div className="h-8 bg-gray-200 rounded w-1/3" />
@@ -322,7 +322,7 @@ export default function SellPage() {
             ))}
           </div>
         ) : plans ? (
-          <div className={`grid grid-cols-1 gap-6 max-w-4xl mx-auto ${plans.length === 1 ? "md:grid-cols-1 max-w-sm" : plans.length === 2 ? "md:grid-cols-2 max-w-2xl" : "md:grid-cols-3"}`}>
+          <div className={`flex overflow-x-auto pt-6 pb-8 -mx-4 px-4 snap-x snap-mandatory gap-4 md:grid md:gap-6 md:overflow-visible md:pb-0 md:pt-0 md:mx-auto md:px-0 md:snap-none max-w-4xl no-scrollbar ${plans.length === 1 ? "md:grid-cols-1 max-w-sm" : plans.length === 2 ? "md:grid-cols-2 max-w-2xl" : "md:grid-cols-3"}`}>
             {plans.map((plan) => {
               const highlighted = plan.isFeatured;
               const { label: priceLabel, period } = planPrice(plan);
@@ -341,7 +341,7 @@ export default function SellPage() {
                 <motion.div
                   key={plan.id}
                   whileHover={{ y: -6 }}
-                  className={`rounded-2xl border p-6 relative transition-all ${
+                  className={`shrink-0 w-[85vw] sm:w-[320px] md:w-auto snap-center rounded-2xl border p-6 relative transition-all mt-4 md:mt-0 ${
                     highlighted
                       ? "border-primary bg-primary text-primary-foreground shadow-xl"
                       : isCurrent

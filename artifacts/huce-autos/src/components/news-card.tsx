@@ -17,22 +17,37 @@ interface NewsCardProps {
 function normalizeNewsText(text?: string | null): string {
   if (!text) return "";
   return text
+    // Replace HTML entities explicitly injected by rich-text editors
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    // Remove markdown image syntax
     .replace(/!\[[^\]]*\]\([^)]+\)/g, " ")
+    // Remove markdown link syntax
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-    .replace(/<[^>]*>/g, " ")
+    // Remove all remaining HTML tags
+    .replace(/<\/?[^>]+(>|$)/g, " ")
+    // Remove markdown code blocks
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/`([^`]+)`/g, "$1")
+    // Remove markdown headers
     .replace(/^#{1,6}\s+/gm, "")
+    // Remove markdown lists
     .replace(/^[-*+]\s+/gm, "")
+    // Remove markdown styling (*, _, ~)
     .replace(/[*_~]/g, "")
+    // Collapse multiple spaces into one
     .replace(/\s+/g, " ")
     .trim();
 }
 
-function buildExcerpt(excerpt?: string | null, content?: string | null, maxLength = 100): string {
+function buildExcerpt(excerpt?: string | null, content?: string | null, maxLength = 60): string {
   const text = normalizeNewsText(excerpt) || normalizeNewsText(content);
   if (!text) return "";
-  return text.length > maxLength ? text.slice(0, maxLength) : text;
+  return text.length > maxLength ? text.slice(0, maxLength).trim() + "..." : text;
 }
 
 export function NewsCard({
@@ -47,7 +62,7 @@ export function NewsCard({
   className,
   dataTestId,
 }: NewsCardProps) {
-  const preview = buildExcerpt(excerpt, content, 100);
+  const preview = buildExcerpt(excerpt, content, 60);
 
   return (
     <article

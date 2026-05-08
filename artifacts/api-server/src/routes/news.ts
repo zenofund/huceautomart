@@ -40,7 +40,7 @@ router.get("/news", async (req, res) => {
       .from(cmsNewsTable)
       .leftJoin(usersTable, eq(cmsNewsTable.authorId, usersTable.id))
       .where(eq(cmsNewsTable.status, "published"))
-      .orderBy(desc(cmsNewsTable.publishedAt))
+      .orderBy(desc(cmsNewsTable.createdAt))
       .limit(limit);
 
     const normalizedArticles = articles.map((article) => ({

@@ -5,8 +5,6 @@ import {
   Platform,
   BackHandler,
   ActivityIndicator,
-  ScrollView,
-  RefreshControl,
   Text,
   TouchableOpacity,
 } from "react-native";
@@ -324,17 +322,7 @@ export function WebViewScreen() {
           </View>
         </View>
       ) : (
-      <ScrollView
-        contentContainerStyle={{ flex: 1 }}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={["hsl(143 60% 26%)"]} // Android spinner color (Primary)
-            tintColor="hsl(143 60% 26%)" // iOS spinner color (Primary)
-          />
-        }
-      >
+      <View style={{ flex: 1 }}>
         <WebView
           ref={webViewRef}
           source={{ uri: webBaseUrl }} // Ensure it hits the production or local frontend URL
@@ -368,13 +356,14 @@ export function WebViewScreen() {
               <ActivityIndicator size="large" color="#ffffff" />
             </View>
           )}
-          pullToRefreshEnabled={Platform.OS === 'ios'} // iOS handles this natively very well, Android uses the ScrollView wrapper
-          bounces={true}
+          pullToRefreshEnabled={false} // Disabled because it requires bounces={true} which causes elastic scrolling
+          bounces={false} // Disable iOS elastic bounce
+          overScrollMode="never" // Disable Android elastic overscroll glow/bounce
           allowsBackForwardNavigationGestures
           sharedCookiesEnabled
           javaScriptEnabled
         />
-      </ScrollView>
+      </View>
       )}
     </SafeAreaView>
   );
