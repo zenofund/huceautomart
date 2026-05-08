@@ -1,0 +1,29 @@
+# Local/dev caches
+.expo/
+.expo-shared/
+node_modules/
+
+# Build and test outputs
+dist/
+build/
+coverage/
+web-build/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Editor/tooling metadata
+.vscode/
+.idea/
+
+# Git metadata
+.git/
+.gitignore
+
+# Documentation and non-build artifacts
+README.md
+*.zip
