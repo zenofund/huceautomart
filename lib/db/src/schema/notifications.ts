@@ -63,3 +63,27 @@ export const insertNotificationSchema = createInsertSchema(notificationsTable).o
 });
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
 export type Notification = typeof notificationsTable.$inferSelect;
+
+export const mobilePlatformEnum = pgEnum("mobile_platform", ["ios", "android"]);
+
+export const notificationDevicesTable = pgTable(
+  "notification_devices",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => usersTable.id, { onDelete: "cascade" }),
+    expoPushToken: text("expo_push_token").notNull(),
+    deviceId: text("device_id"),
+    platform: mobilePlatformEnum("platform").notNull(),
+    appVersion: text("app_version"),
+    isActive: boolean("is_active").notNull().default(true),
+    lastSeenAt: timestamp("last_seen_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    index("notification_devices_user_idx").on(table.userId),
+    index("notification_devices_token_idx").on(table.expoPushToken),
+  ],
+);
