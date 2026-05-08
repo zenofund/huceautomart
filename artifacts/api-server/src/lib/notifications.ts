@@ -1,5 +1,9 @@
-import { db, notificationsTable, usersTable } from "@workspace/db";
+import { db, notificationsTable, usersTable, notificationDevicesTable } from "@workspace/db";
 import { and, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
+import { Expo, ExpoPushMessage } from "expo-server-sdk";
+
+// Create a new Expo SDK client
+const expo = new Expo();
 
 type NotificationType = typeof notificationsTable.$inferInsert["type"];
 type NotificationPriority = typeof notificationsTable.$inferInsert["priority"];
@@ -16,7 +20,81 @@ interface NotifyInput {
   data?: Record<string, unknown>;
 }
 
+function resolvePath(type?: string | null, entityType?: string | null, entityId?: number | null, userRole?: string | null): string {
+  if (!entityType || !entityId) {
+    return "/notifications";
+  }
+  
+  switch (entityType) {
+    case "offer":
+      return userRole === "seller" ? `/seller/offers` : `/dashboard/activity/offer/${entityId}`;
+    case "inspection":
+      return userRole === "inspector" ? `/inspector/inspections/${entityId}` : `/dashboard/activity/inspection/${entityId}`;
+    case "purchase":
+      return userRole === "seller" ? `/seller/wallet` : `/dashboard/activity`;
+    case "message":
+      return userRole === "seller" ? `/seller/messages/${entityId}` : `/dashboard/messages/${entityId}`;
+    case "listing":
+      return userRole === "admin" ? `/admin/inventory/${entityId}` : `/seller/listings/${entityId}`;
+    default:
+      return `/notifications`;
+  }
+}
+
+async function sendPushNotification(userId: number, title: string, message: string, data: Record<string, unknown>) {
+  try {
+    const devices = await db
+      .select({ token: notificationDevicesTable.expoPushToken })
+      .from(notificationDevicesTable)
+      .where(
+        and(
+          eq(notificationDevicesTable.userId, userId),
+          eq(notificationDevicesTable.isActive, true)
+        )
+      );
+
+    if (devices.length === 0) return;
+
+    const messages: ExpoPushMessage[] = [];
+    for (const device of devices) {
+      if (!Expo.isExpoPushToken(device.token)) continue;
+      messages.push({
+        to: device.token,
+        sound: "default",
+        title,
+        body: message,
+        data,
+      });
+    }
+
+    if (messages.length === 0) return;
+
+    const chunks = expo.chunkPushNotifications(messages);
+    for (const chunk of chunks) {
+      // Send asynchronously without blocking the main request
+      expo.sendPushNotificationsAsync(chunk).catch(err => {
+        console.error("Error sending push notification chunk:", err);
+      });
+    }
+  } catch (error) {
+    console.error("Failed to send push notifications:", error);
+  }
+}
+
 export async function createNotification(input: NotifyInput) {
+  // 1. Fetch user role for path resolution
+  const [user] = await db
+    .select({ role: usersTable.role })
+    .from(usersTable)
+    .where(eq(usersTable.id, input.userId))
+    .limit(1);
+
+  // 2. Resolve target path
+  const path = resolvePath(input.type, input.entityType, input.entityId, user?.role);
+  
+  // 3. Inject path into data
+  const data = { ...(input.data || {}), path };
+
   const [row] = await db
     .insert(notificationsTable)
     .values({
@@ -27,9 +105,13 @@ export async function createNotification(input: NotifyInput) {
       entityType: input.entityType ?? null,
       entityId: input.entityId ?? null,
       priority: input.priority ?? "normal",
-      data: input.data ?? null,
+      data,
     })
     .returning();
+
+  // Fire native push notifications
+  sendPushNotification(input.userId, input.title, input.message, data);
+
   return row;
 }
 
@@ -38,21 +120,71 @@ export async function createBulkNotifications(
   payload: Omit<NotifyInput, "userId">,
 ) {
   if (userIds.length === 0) return [];
+
+  // 1. Fetch user roles for path resolution
+  const users = await db
+    .select({ id: usersTable.id, role: usersTable.role })
+    .from(usersTable)
+    .where(inArray(usersTable.id, userIds));
+
+  const roleMap = new Map(users.map(u => [u.id, u.role]));
+
+  // 2. Prepare payload with specific resolved paths
+  const valuesToInsert = userIds.map((userId) => {
+    const userRole = roleMap.get(userId);
+    const path = resolvePath(payload.type, payload.entityType, payload.entityId, userRole);
+    const data = { ...(payload.data || {}), path };
+
+    return {
+      userId,
+      type: payload.type,
+      title: payload.title,
+      message: payload.message,
+      entityType: payload.entityType ?? null,
+      entityId: payload.entityId ?? null,
+      priority: payload.priority ?? "normal",
+      data,
+    };
+  });
+
   const rows = await db
     .insert(notificationsTable)
-    .values(
-      userIds.map((userId) => ({
-        userId,
-        type: payload.type,
-        title: payload.title,
-        message: payload.message,
-        entityType: payload.entityType ?? null,
-        entityId: payload.entityId ?? null,
-        priority: payload.priority ?? "normal",
-        data: payload.data ?? null,
-      })),
-    )
+    .values(valuesToInsert)
     .returning();
+
+  // 3. Fire push notifications for all users
+  db.select({ userId: notificationDevicesTable.userId, token: notificationDevicesTable.expoPushToken })
+    .from(notificationDevicesTable)
+    .where(
+      and(
+        inArray(notificationDevicesTable.userId, userIds),
+        eq(notificationDevicesTable.isActive, true)
+      )
+    )
+    .then(devices => {
+      const messages: ExpoPushMessage[] = [];
+      const userToDataMap = new Map(valuesToInsert.map(v => [v.userId, v.data]));
+
+      for (const device of devices) {
+        if (!Expo.isExpoPushToken(device.token)) continue;
+        messages.push({
+          to: device.token,
+          sound: "default",
+          title: payload.title,
+          body: payload.message,
+          data: userToDataMap.get(device.userId) || {},
+        });
+      }
+
+      if (messages.length > 0) {
+        const chunks = expo.chunkPushNotifications(messages);
+        for (const chunk of chunks) {
+          expo.sendPushNotificationsAsync(chunk).catch(console.error);
+        }
+      }
+    })
+    .catch(console.error);
+
   return rows;
 }
 

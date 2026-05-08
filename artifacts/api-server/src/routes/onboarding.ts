@@ -1,8 +1,8 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { db, onboardingSlidesTable } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
 import { requireAdmin, type AuthRequest } from "../lib/auth-middleware";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 const router = Router();
 
@@ -54,7 +54,7 @@ const createSlideSchema = z.object({
   isActive: z.boolean().default(true),
 });
 
-router.post("/admin/onboarding", requireAdmin, async (req: AuthRequest, res) => {
+router.post("/admin/onboarding", requireAdmin, async (req: AuthRequest, res: Response) => {
   try {
     const data = createSlideSchema.parse(req.body);
 
@@ -76,9 +76,9 @@ router.post("/admin/onboarding", requireAdmin, async (req: AuthRequest, res) => 
 // Update a slide
 const updateSlideSchema = createSlideSchema.partial();
 
-router.put("/admin/onboarding/:id", requireAdmin, async (req: AuthRequest, res) => {
+router.put("/admin/onboarding/:id", requireAdmin, async (req: AuthRequest, res: Response) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(String(req.params.id));
     if (isNaN(id)) return res.status(400).json({ error: "Invalid ID" });
 
     const data = updateSlideSchema.parse(req.body);
@@ -104,9 +104,9 @@ router.put("/admin/onboarding/:id", requireAdmin, async (req: AuthRequest, res) 
 });
 
 // Delete a slide
-router.delete("/admin/onboarding/:id", requireAdmin, async (req: AuthRequest, res) => {
+router.delete("/admin/onboarding/:id", requireAdmin, async (req: AuthRequest, res: Response) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(String(req.params.id));
     if (isNaN(id)) return res.status(400).json({ error: "Invalid ID" });
 
     const [slide] = await db
