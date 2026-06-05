@@ -2,12 +2,24 @@
 .expo/
 .expo-shared/
 node_modules/
+.npm/
+
+# Workspace/Monorepo caches (ignore root level cache if run from there)
+../../node_modules/
+../../.git/
+../../dist/
+../../artifacts/api-server/node_modules/
+../../artifacts/api-server/dist/
+../../artifacts/huce-autos/node_modules/
+../../artifacts/huce-autos/dist/
 
 # Build and test outputs
 dist/
 build/
 coverage/
 web-build/
+android/
+ios/
 
 # Logs and temporary files
 *.log
@@ -27,3 +39,5 @@ Thumbs.db
 # Documentation and non-build artifacts
 README.md
 *.zip
+*.apk
+*.aab
