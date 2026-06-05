@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Phone, Mail, MapPin, ChevronDown, Bell, LayoutDashboard, UserRound, LogOut, Facebook, Instagram, ArrowUp } from "lucide-react";
+import { ChevronRight, Phone, Mail, MapPin, ChevronDown, Bell, LayoutDashboard, UserRound, LogOut, Facebook, Instagram, ArrowUp, X, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MobileFooterSheet } from "@/components/mobile-footer-sheet";
 import {
@@ -24,6 +24,72 @@ import { useAuth } from "@/context/auth-context";
 
 const DEFAULT_LOCATIONS = ["All Locations", "Lagos", "Abuja", "Port Harcourt"];
 const LOCATION_STORAGE_KEY = "huce:selected-location";
+
+function SmartAppBanner() {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    // If inside our own mobile app's WebView, don't show the banner
+    if ((window as any).ReactNativeWebView) return;
+    
+    // Check if mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile && !sessionStorage.getItem('huce-app-banner-closed')) {
+      setShow(true);
+    }
+  }, []);
+
+  if (!show) return null;
+
+  const handleClose = () => {
+    setShow(false);
+    sessionStorage.setItem('huce-app-banner-closed', 'true');
+  };
+
+  const handleOpenApp = () => {
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const playStoreLink = 'https://play.google.com/store/apps/details?id=com.huceautomart.mobile&pcampaignid=web_share';
+    
+    if (isAndroid) {
+      // Android Intent URL gracefully falls back to the Play Store if the app isn't installed
+      const currentPath = window.location.pathname + window.location.search;
+      window.location.href = `intent://${window.location.host}${currentPath}#Intent;scheme=https;package=com.huceautomart.mobile;S.browser_fallback_url=${encodeURIComponent(playStoreLink)};end;`;
+    } else {
+      // iOS / others fallback
+      const appScheme = 'huceautos://';
+      const now = Date.now();
+      setTimeout(() => {
+        if (Date.now() - now < 2000) {
+          window.location.href = playStoreLink; // Will update to App Store later
+        }
+      }, 1500);
+      window.location.href = appScheme;
+    }
+  };
+
+  return (
+    <div className="bg-primary/5 border-b border-primary/10 px-4 py-3 flex items-center justify-between shadow-sm relative z-50">
+      <div className="flex items-center gap-3 flex-1 overflow-hidden">
+        <button onClick={handleClose} className="p-1 -ml-1 text-gray-500 hover:text-gray-700" aria-label="Close banner">
+          <X className="h-4 w-4" />
+        </button>
+        <div className="h-9 w-9 bg-primary text-white rounded-lg flex items-center justify-center shrink-0 shadow-sm">
+          <Smartphone className="h-5 w-5" />
+        </div>
+        <div className="flex flex-col min-w-0 pr-2">
+          <span className="text-sm font-bold text-gray-900 truncate">Huce Automart App</span>
+          <span className="text-xs text-gray-600 truncate">Faster, secure & optimized</span>
+        </div>
+      </div>
+      <button 
+        onClick={handleOpenApp}
+        className="shrink-0 bg-primary text-white text-xs font-bold px-4 py-2 rounded-full shadow-sm hover:bg-primary/90 transition-colors"
+      >
+        OPEN IN APP
+      </button>
+    </div>
+  );
+}
 
 export function Navbar() {
   const [location, setLocation] = useLocation();
@@ -205,7 +271,9 @@ export function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
+    <>
+      <SmartAppBanner />
+      <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
       <div className="px-4 md:px-5 lg:px-8 h-14 flex items-center justify-between gap-4 w-full">
 
         {/* Logo */}
@@ -559,6 +627,7 @@ export function Navbar() {
 
       </div>
     </header>
+    </>
   );
 }
 
@@ -587,7 +656,7 @@ export function Footer() {
             </div>
             <div className="flex items-center gap-2">
               <Mail className="h-4 w-4 text-secondary" />
-              <span>hello@huceautos.com</span>
+              <span>hello@huceautomart.com</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-secondary" />

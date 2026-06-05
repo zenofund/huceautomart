@@ -15,11 +15,34 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.huceautomart.mobile"
+      "bundleIdentifier": "com.huceautomart.mobile",
+      "associatedDomains": [
+        "applinks:huceautomart.com",
+        "applinks:www.huceautomart.com"
+      ]
     },
     "android": {
       "package": "com.huceautomart.mobile",
       "versionCode": 3,
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "huceautomart.com",
+              "pathPrefix": "/"
+            },
+            {
+              "scheme": "https",
+              "host": "www.huceautomart.com",
+              "pathPrefix": "/"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#195A32"

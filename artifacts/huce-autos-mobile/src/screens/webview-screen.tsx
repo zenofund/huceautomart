@@ -224,7 +224,13 @@ export function WebViewScreen() {
             handleAuthToken(token).catch(() => {});
           }
         } else if (webViewRef.current) {
-          webViewRef.current.reload();
+          // Handle standard deep linking paths (Android App Links / iOS Universal Links)
+          const targetPath = normalizeWebPath(url);
+          if (targetPath && targetPath !== '/') {
+            navigateWebViewToPath(targetPath);
+          } else {
+            webViewRef.current.reload();
+          }
         }
       }
     };
