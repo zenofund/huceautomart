@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Phone, Mail, MapPin, ChevronDown, Bell, LayoutDashboard, UserRound, LogOut, Facebook, Twitter, Instagram, Linkedin, ArrowUp } from "lucide-react";
+import { ChevronRight, Phone, Mail, MapPin, ChevronDown, Bell, LayoutDashboard, UserRound, LogOut, Facebook, Instagram, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MobileFooterSheet } from "@/components/mobile-footer-sheet";
 import {
@@ -583,7 +583,7 @@ export function Footer() {
           <div className="flex flex-col gap-2 text-sm text-primary-foreground/60">
             <div className="flex items-center gap-2">
               <Phone className="h-4 w-4 text-secondary" />
-              <span>+234 800 HUCE AUTOS</span>
+              <span>0913 598 8513</span>
             </div>
             <div className="flex items-center gap-2">
               <Mail className="h-4 w-4 text-secondary" />
@@ -642,17 +642,16 @@ export function Footer() {
 
           <h5 className="font-semibold mb-3 text-primary-foreground">Connect With Us</h5>
           <div className="flex items-center gap-2">
-            <a href="#" aria-label="Facebook" className="h-9 w-9 rounded-full border border-primary-foreground/40 flex items-center justify-center hover:border-primary-foreground/80 transition-colors">
+            <a href="https://www.facebook.com/profile.php?id=61588837874397" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="h-9 w-9 rounded-full border border-primary-foreground/40 flex items-center justify-center hover:border-primary-foreground/80 transition-colors">
               <Facebook className="h-4 w-4" />
             </a>
-            <a href="#" aria-label="Twitter" className="h-9 w-9 rounded-full border border-primary-foreground/40 flex items-center justify-center hover:border-primary-foreground/80 transition-colors">
-              <Twitter className="h-4 w-4" />
-            </a>
-            <a href="#" aria-label="Instagram" className="h-9 w-9 rounded-full border border-primary-foreground/40 flex items-center justify-center hover:border-primary-foreground/80 transition-colors">
+            <a href="https://www.instagram.com/huceautomart?igsh=aTlicG1peHp1Z2lq" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="h-9 w-9 rounded-full border border-primary-foreground/40 flex items-center justify-center hover:border-primary-foreground/80 transition-colors">
               <Instagram className="h-4 w-4" />
             </a>
-            <a href="#" aria-label="LinkedIn" className="h-9 w-9 rounded-full border border-primary-foreground/40 flex items-center justify-center hover:border-primary-foreground/80 transition-colors">
-              <Linkedin className="h-4 w-4" />
+            <a href="https://www.tiktok.com/@huceautomart" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="h-9 w-9 rounded-full border border-primary-foreground/40 flex items-center justify-center hover:border-primary-foreground/80 transition-colors">
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.12-3.44-3.17-3.61-5.46-.02-.33-.02-.66-.02-.99.1-1.36.56-2.71 1.34-3.83 1.18-1.78 3.1-2.95 5.23-3.15.35-.04.7-.04 1.05-.04v4.01c-.89.04-1.77.34-2.51.87-.87.62-1.46 1.53-1.61 2.6-.08.57-.04 1.16.14 1.7.35.98 1.12 1.8 2.05 2.19.86.37 1.85.42 2.74.13.93-.31 1.72-.98 2.17-1.85.31-.6.44-1.27.46-1.93.01-4.66.01-9.32.01-13.98z"/>
+              </svg>
             </a>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { Link } from "wouter";
-import { Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin, ChevronRight } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Instagram, ChevronRight } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -61,7 +61,7 @@ export function MobileFooterSheet({ children }: { children: ReactNode }) {
             <div className="flex flex-col gap-3 text-sm text-gray-600 font-medium">
               <div className="flex items-center gap-3">
                 <Phone className="h-4 w-4 text-primary" />
-                <span>+234 800 HUCE AUTOS</span>
+                <span>0913 598 8513</span>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="h-4 w-4 text-primary" />
@@ -97,17 +97,16 @@ export function MobileFooterSheet({ children }: { children: ReactNode }) {
             <div>
               <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">Connect With Us</h4>
               <div className="flex items-center gap-3">
-                <a href="#" className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors">
+                <a href="https://www.facebook.com/profile.php?id=61588837874397" target="_blank" rel="noopener noreferrer" className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors">
                   <Facebook className="h-4 w-4" />
                 </a>
-                <a href="#" className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors">
-                  <Twitter className="h-4 w-4" />
-                </a>
-                <a href="#" className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors">
+                <a href="https://www.instagram.com/huceautomart?igsh=aTlicG1peHp1Z2lq" target="_blank" rel="noopener noreferrer" className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors">
                   <Instagram className="h-4 w-4" />
                 </a>
-                <a href="#" className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors">
-                  <Linkedin className="h-4 w-4" />
+                <a href="https://www.tiktok.com/@huceautomart" target="_blank" rel="noopener noreferrer" className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.12-3.44-3.17-3.61-5.46-.02-.33-.02-.66-.02-.99.1-1.36.56-2.71 1.34-3.83 1.18-1.78 3.1-2.95 5.23-3.15.35-.04.7-.04 1.05-.04v4.01c-.89.04-1.77.34-2.51.87-.87.62-1.46 1.53-1.61 2.6-.08.57-.04 1.16.14 1.7.35.98 1.12 1.8 2.05 2.19.86.37 1.85.42 2.74.13.93-.31 1.72-.98 2.17-1.85.31-.6.44-1.27.46-1.93.01-4.66.01-9.32.01-13.98z"/>
+                  </svg>
                 </a>
               </div>
             </div>
