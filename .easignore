@@ -3,6 +3,10 @@ artifacts/api-server/node_modules/
 artifacts/api-server/dist/
 artifacts/huce-autos/node_modules/
 artifacts/huce-autos/dist/
+artifacts/huce-autos-mobile/node_modules/
+artifacts/db/node_modules/
+artifacts/api-zod/node_modules/
+artifacts/api-client-react/node_modules/
 .git/
 .expo/
 android/
