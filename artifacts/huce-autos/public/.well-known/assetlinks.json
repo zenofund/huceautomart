@@ -4,7 +4,10 @@
     "target": {
       "namespace": "android_app",
       "package_name": "com.huceautomart.mobile",
-      "sha256_cert_fingerprints": ["REPLACE_WITH_PLAY_APP_SIGNING_SHA256"]
+      "sha256_cert_fingerprints": [
+        "B3:27:E9:E7:AD:C6:8D:7D:D1:5B:9B:B9:67:CE:D3:06:F5:60:A4:5D:16:07:0D:82:EF:BD:76:37:AC:D6:D7:A6",
+        "8F:23:DD:10:D3:3F:F4:75:F5:45:3D:97:75:CD:61:E8:97:07:5A:37:EF:F7:C8:77:70:CF:4D:EF:14:9D:09:79"
+      ]
     }
   }
 ]
