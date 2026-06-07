@@ -23,7 +23,7 @@
     },
     "android": {
       "package": "com.huceautomart.mobile",
-      "versionCode": 6,
+      "versionCode": 8,
       "intentFilters": [
         {
           "action": "VIEW",
@@ -40,7 +40,10 @@
               "pathPrefix": "/"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ],
       "adaptiveIcon": {

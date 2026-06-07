@@ -755,7 +755,7 @@ export function Footer() {
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-background text-foreground">
+    <div className="min-h-dvh flex flex-col bg-background text-foreground">
       <Navbar />
       <main className="flex-1">
         {children}

@@ -1,32 +1,24 @@
 # Local/dev caches
-.expo/
-.expo-shared/
-node_modules/
-.npm/
+**/.expo/
+**/.expo-shared/
+**/node_modules/
+**/.npm/
 
-# Workspace/Monorepo caches (ignore root level cache if run from there)
-../../node_modules/
-../../.git/
-../../dist/
-../../artifacts/api-server/node_modules/
-../../artifacts/api-server/dist/
-../../artifacts/huce-autos/node_modules/
-../../artifacts/huce-autos/dist/
-
-# Build and test outputs
-dist/
-build/
-coverage/
-web-build/
-android/
-ios/
+# Workspace/Monorepo caches
+**/dist/
+**/build/
+**/coverage/
+**/web-build/
+**/android/
+**/ios/
+**/.git/
 
 # Logs and temporary files
-*.log
-*.tmp
-*.temp
-.DS_Store
-Thumbs.db
+**/*.log
+**/*.tmp
+**/*.temp
+**/.DS_Store
+**/Thumbs.db
 
 # Editor/tooling metadata
 .vscode/

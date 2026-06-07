@@ -1,0 +1,12 @@
+node_modules/
+artifacts/api-server/node_modules/
+artifacts/api-server/dist/
+artifacts/huce-autos/node_modules/
+artifacts/huce-autos/dist/
+.git/
+.expo/
+android/
+ios/
+dist/
+build/
+*.log

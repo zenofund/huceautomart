@@ -456,7 +456,7 @@ function ChatBubble({
     return (
       <div className="flex justify-end">
         <div className="max-w-[80%] sm:max-w-md rounded-2xl rounded-br-sm bg-primary text-primary-foreground px-3 sm:px-4 py-2">
-          <div className="text-sm whitespace-pre-wrap break-words">{message.content}</div>
+          <div className="text-sm whitespace-pre-wrap break-all">{message.content}</div>
           <div className="mt-1 flex items-center justify-end gap-1 text-[11px] text-primary-foreground/80">
             <span>{formatTime(message.createdAt)}</span>
             <CheckCheck className="h-3 w-3" />
@@ -481,7 +481,7 @@ function ChatBubble({
             <span className="text-[11px] text-gray-500">{senderRole}</span>
           )}
         </div>
-        <div className="mt-1 text-sm whitespace-pre-wrap break-words text-gray-800">
+        <div className="mt-1 text-sm whitespace-pre-wrap break-all text-gray-800">
           {message.content}
         </div>
         <div className="mt-1 text-[11px] text-gray-400 text-right">
