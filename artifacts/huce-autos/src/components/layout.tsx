@@ -49,21 +49,19 @@ function SmartAppBanner() {
   const handleOpenApp = () => {
     const isAndroid = /Android/i.test(navigator.userAgent);
     const playStoreLink = 'https://play.google.com/store/apps/details?id=com.huceautomart.mobile&pcampaignid=web_share';
+    const appStoreLink: string | null = null;
+    const currentPath = window.location.pathname + window.location.search;
     
     if (isAndroid) {
-      // Android Intent URL gracefully falls back to the Play Store if the app isn't installed
-      const currentPath = window.location.pathname + window.location.search;
       window.location.href = `intent://${window.location.host}${currentPath}#Intent;scheme=https;package=com.huceautomart.mobile;S.browser_fallback_url=${encodeURIComponent(playStoreLink)};end;`;
     } else {
-      // iOS / others fallback
-      const appScheme = 'huceautos://';
       const now = Date.now();
       setTimeout(() => {
         if (Date.now() - now < 2000) {
-          window.location.href = playStoreLink; // Will update to App Store later
+          if (appStoreLink) window.location.href = appStoreLink;
         }
       }, 1500);
-      window.location.href = appScheme;
+      window.location.href = `huceautos://${currentPath}`;
     }
   };
 

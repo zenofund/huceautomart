@@ -46,6 +46,17 @@ export function WebViewScreen() {
     setTimeout(() => setRefreshing(false), 1500);
   };
 
+  const toQueryString = (value: unknown): string => {
+    if (!value || typeof value !== "object") return "";
+    const params = new URLSearchParams();
+    for (const [key, raw] of Object.entries(value as Record<string, unknown>)) {
+      if (typeof raw === "string") params.set(key, raw);
+      if (typeof raw === "number" && Number.isFinite(raw)) params.set(key, String(raw));
+    }
+    const qs = params.toString();
+    return qs ? `?${qs}` : "";
+  };
+
   const normalizeWebPath = (value: unknown): string | null => {
     if (typeof value !== "string") return null;
     const trimmed = value.trim();
@@ -57,6 +68,11 @@ export function WebViewScreen() {
       } catch {
         return null;
       }
+    }
+    if (trimmed.startsWith("huceautos://")) {
+      const parsed = Linking.parse(trimmed);
+      const path = parsed.path ? `/${parsed.path.replace(/^\/+/, "")}` : "/";
+      return `${path}${toQueryString(parsed.queryParams)}`;
     }
     return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
   };
