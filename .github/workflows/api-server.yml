@@ -30,22 +30,14 @@ jobs:
         with:
           node-version: 24.x
 
-      - name: Install pnpm
-        run: |
-          npm install --global pnpm@11.4.0
-          pnpm_bin="$(npm prefix --global)/bin"
-          echo "$pnpm_bin" >> "$GITHUB_PATH"
-          export PATH="$pnpm_bin:$PATH"
-          pnpm --version
-
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npx --yes pnpm@11.4.0 install --frozen-lockfile
 
       - name: Type-check API dependencies
-        run: pnpm --filter @workspace/api-server run typecheck
+        run: npx --yes pnpm@11.4.0 --filter @workspace/api-server run typecheck
 
       - name: Build API server
-        run: pnpm --filter @workspace/api-server run build
+        run: npx --yes pnpm@11.4.0 --filter @workspace/api-server run build
 
       - name: Verify production entry point
         run: test -f artifacts/api-server/dist/index.mjs
