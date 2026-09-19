@@ -103,12 +103,23 @@ async function uploadFileViaCloudinary(file: File): Promise<UploadResult> {
   };
 }
 
-export async function uploadFile(file: File): Promise<UploadResult> {
+import { applyWatermark } from "./watermark";
+
+export async function uploadFile(file: File, options?: { watermark?: boolean }): Promise<UploadResult> {
+  let fileToUpload = file;
+  if (options?.watermark) {
+    try {
+      fileToUpload = await applyWatermark(file);
+    } catch (e) {
+      console.error("Failed to apply watermark", e);
+    }
+  }
+
   try {
-    return await uploadFileViaCloudinary(file);
+    return await uploadFileViaCloudinary(fileToUpload);
   } catch (err) {
     // Local fallback keeps uploads working before Cloudinary is configured.
-    return uploadFileLocally(file).catch((localErr) => {
+    return uploadFileLocally(fileToUpload).catch((localErr) => {
       const primary = err instanceof Error ? err.message : "Upload failed";
       const fallback =
         localErr instanceof Error ? localErr.message : "Local upload failed";

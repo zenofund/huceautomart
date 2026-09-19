@@ -105,7 +105,8 @@ export function AddResultDialog({
     try {
       const uploaded: string[] = [];
       for (const file of Array.from(files)) {
-        const r = await uploadFile(file);
+        const isVideo = file.type.startsWith("video/");
+        const r = await uploadFile(file, { watermark: !isVideo });
         uploaded.push(r.servingUrl);
       }
       setImages((prev) => [...prev, ...uploaded].slice(0, 20));

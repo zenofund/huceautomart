@@ -370,10 +370,10 @@ export function AddListingDialog({
     // Upload each file via presigned URL flow. We do this in parallel and
     // append successful uploads only.
     const results = await Promise.allSettled(
-      list.map(async (file) => {
-        const isVideo = file.type.startsWith("video/");
-        const { servingUrl } = await uploadFile(file);
-        const item: MediaItem = {
+        list.map(async (file) => {
+          const isVideo = file.type.startsWith("video/");
+          const { servingUrl } = await uploadFile(file, { watermark: !isVideo });
+          const item: MediaItem = {
           url: normalizeMediaUrl(servingUrl),
           mediaType: isVideo ? "video" : "image",
           fileName: file.name,

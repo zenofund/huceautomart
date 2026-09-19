@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, MapPin, Fuel, Gauge, Star, Settings2, Palette, ShieldCheck, ArrowUpRight, Heart } from "lucide-react";
-import { WatermarkOverlay } from "@/components/watermark-overlay";
 import { formatNaira, formatMileage } from "@/lib/format";
 import { generateSlug } from "@/lib/seo";
 import type { Car } from "@workspace/api-client-react";
@@ -127,8 +126,8 @@ export function CarCard({ car }: CarCardProps) {
               (e.target as HTMLImageElement).src = CAR_PLACEHOLDER_IMAGES.default;
             }}
           />
-          <WatermarkOverlay />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+            {/* Watermark is now baked into the image itself during upload */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
           <div className="absolute top-3 left-3 flex gap-2 z-10">
             <Badge
               className={`text-xs font-semibold shadow-sm ${

@@ -3,7 +3,6 @@ import { Link, useParams, useLocation } from "wouter";
 import { useAuth } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import { WatermarkOverlay } from "@/components/watermark-overlay";
 import {
   ChevronLeft, ChevronRight, MapPin, Gauge, Calendar, Palette,
   BadgeCheck, Share2, Heart, Car, ArrowLeft,
@@ -59,7 +58,6 @@ function ImageGallery({ images, overlay }: { images: string[]; overlay?: ReactNo
             onError={(e) => { (e.target as HTMLImageElement).src = PLACEHOLDER; }}
           />
         </AnimatePresence>
-        <WatermarkOverlay />
 
         {imgs.length > 1 && (
           <>
