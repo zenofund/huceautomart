@@ -34,7 +34,7 @@ jobs:
 
       - name: Install pnpm
         run: |
-          npm install --prefix "$RUNNER_TEMP/pnpm" pnpm@11.4.0
+          npm install --prefix "$RUNNER_TEMP/pnpm" pnpm@12.3.4
           "$PNPM_BIN" --version
 
       - name: Install dependencies
