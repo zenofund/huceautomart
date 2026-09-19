@@ -1,10 +1,19 @@
 {
   "name": "workspace",
   "version": "0.0.0",
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@10.17.1",
+  "engines": {
+    "node": "22.x"
+  },
+  "main": "dist/dist/index.mjs",
   "license": "MIT",
   "scripts": {
-    "build": "pnpm run typecheck && pnpm -r --if-present run build",
+    "build": "node scripts/build-hostinger.mjs",
+    "build:hostinger": "node scripts/build-hostinger.mjs",
+    "build:api": "node artifacts/api-server/build.mjs",
+    "build:workspace": "pnpm run typecheck && pnpm -r --if-present run build",
+    "start": "node --enable-source-maps dist/dist/index.mjs",
+    "test:deployment": "node --test scripts/hostinger-deployment.test.mjs",
     "typecheck:libs": "tsc --build",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
   },

@@ -4,10 +4,10 @@ packages:
   - lib/integrations/*
   - scripts
 
-allowBuilds:
-  esbuild: set this to true or false
-
 autoInstallPeers: false
+injectWorkspacePackages: true
+syncInjectedDepsAfterScripts:
+  - build
 
 catalog:
   '@tailwindcss/vite': ^4.1.14

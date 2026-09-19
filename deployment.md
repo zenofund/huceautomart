@@ -1,6 +1,9 @@
 # HUCE Autos — Deployment Guide
 ### Frontend on cPanel · Backend on Render
 
+For the API-only Hostinger Node.js Web App deployment, use [HOSTINGER.md](HOSTINGER.md).
+The settings below describe the older Render/cPanel deployment.
+
 ---
 
 ## Table of Contents
