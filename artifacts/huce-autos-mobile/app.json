@@ -23,7 +23,7 @@
     },
     "android": {
       "package": "com.huceautomart.mobile",
-      "versionCode": 8,
+      "versionCode": 12,
       "intentFilters": [
         {
           "action": "VIEW",
