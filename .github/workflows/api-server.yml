@@ -20,31 +20,30 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      PNPM_BIN: ${{ runner.temp }}/pnpm/node_modules/.bin/pnpm
 
     steps:
       - name: Check out source
-        uses: actions/checkout@v5
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: 22.x
+        uses: actions/checkout@v4
 
       - name: Install pnpm
-        run: |
-          npm install --prefix "$RUNNER_TEMP/pnpm" pnpm@9.0.0
-          "$PNPM_BIN" --version
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: $PNPM_BIN install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Type-check API dependencies
-        run: $PNPM_BIN --filter @workspace/api-server run typecheck
+        run: pnpm --filter @workspace/api-server run typecheck
 
       - name: Build API server
-        run: $PNPM_BIN --filter @workspace/api-server run build
+        run: pnpm --filter @workspace/api-server run build
 
       - name: Verify production entry point
         run: test -f artifacts/api-server/dist/index.mjs
