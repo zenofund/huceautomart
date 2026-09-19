@@ -10,6 +10,7 @@
   "engines": {
     "node": "22.x"
   },
+  "packageManager": "pnpm@10.17.1",
   "scripts": {
     "dev": "pnpm run build && pnpm run start",
     "build": "node ./build.mjs",
