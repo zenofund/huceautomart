@@ -26,7 +26,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9.14.0
+          version: 10.17.1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -34,25 +34,17 @@ jobs:
           node-version: '22'
           cache: 'pnpm'
 
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install Dependencies (includes dev deps for build)
+        run: pnpm install --frozen-lockfile --prod=false
 
-      - name: Build API Server
-        run: pnpm --filter @workspace/api-server build
-
-      - name: Prepare Deployment Package
-        run: |
-          mkdir -p deploy/dist
-          cp -r artifacts/api-server/dist/* deploy/dist/
-          cp artifacts/api-server/package.json deploy/
-          echo 'node dist/index.mjs' > deploy/start.sh
-          chmod +x deploy/start.sh
+      - name: Build Hostinger Package
+        run: pnpm run build
 
       - name: Deploy to Hostinger Branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: hostinger-production
-          publish_dir: ./deploy
+          publish_dir: ./dist
           force_orphan: true
           commit_message: "chore: automated build for Hostinger deployment"
